@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/horizontal_Logo.png";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const user = useSelector((store) => store.user);
+  
+
   return (
-    <div className="navbar bg-black shadow-sm">
-        <div className="flex-1">
-          <Link className="inline-block cursor-pointer" to="/"><img src={logo} className="w-40 h-auto"></img></Link>
-        </div>
+    <div className="navbar relative z-50 bg-[#0D1110] shadow-sm">
+      <div className="flex-1">
+        <Link className="inline-block cursor-pointer" to="/">
+          <img src={logo} className="w-40 h-auto"></img>
+        </Link>
+      </div>
+      {user && (
         <div className="flex gap-2">
           <div className="dropdown dropdown-end">
             <div
@@ -17,7 +24,7 @@ const Navbar = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src={user.photoUrl ? user.photoUrl : "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
                 />
               </div>
             </div>
@@ -40,8 +47,9 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
-      </div>
-  )
-}
+      )}
+    </div>
+  );
+};
 
-export default Navbar
+export default Navbar;
