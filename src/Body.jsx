@@ -9,10 +9,9 @@ import { useEffect } from "react";
 
 const Body = () => {
   const dispatch = useDispatch();
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const fetchData = async () => {
-
     try {
       const res = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
@@ -20,14 +19,15 @@ const Body = () => {
 
       dispatch(addUser(res.data));
     } catch (err) {
+      console.log("Profile error:", err.response?.data);
+      console.log("Status:", err.response?.status);
       navigate("/login");
     }
   };
 
-
   useEffect(() => {
     fetchData();
-  }, [])
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#080A0A] text-white">
