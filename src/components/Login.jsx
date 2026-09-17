@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [emailId, setemailId] = useState("anaghawaghmare@gmail.com");
   const [password, setpassword] = useState("Anagha@11");
+  const [error, seterror] = useState("")
   const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -27,7 +28,7 @@ const Login = () => {
       dispatch(addUser(res.data));
       navigate("/feed");
     } catch (err) {
-      console.log(err.message);
+      seterror(err.response?.data || "Something went wrong");
     }
   };
 
@@ -72,6 +73,8 @@ const Login = () => {
               value={password}
               onChange={(e) => setpassword(e.target.value)}
             />
+
+            <p className="text-red-700">{error}</p>
 
             <button
               className="btn btn-neutral mt-4 bg-[#39FF88] text-[#080A0A]"
