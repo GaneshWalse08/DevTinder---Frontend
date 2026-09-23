@@ -35,7 +35,7 @@ const Login = () => {
       toast.success("successfully logged in!")
       navigate("/feed");
     } catch (err) {
-      toast.success("logged in Failed!")
+      toast.error("logged in Failed!")
       seterror(err.response?.data || "Something went wrong");
     }
   };

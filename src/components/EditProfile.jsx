@@ -12,8 +12,9 @@ const EditProfile = ({ user }) => {
 
   const [firstName, setfirstName] = useState(user.firstName || "");
   const [lastName, setlastName] = useState(user.lastName || "");
-  // const [error, seterror] = useState("");
+  const [error, seterror] = useState("");
   const [age, setage] = useState(user.age || "");
+  const [photoFile, setphotoFile] = useState(null);
   const [photoUrl, setphotoUrl] = useState(user.photoUrl || "");
   const [skills, setskills] = useState(
     Array.isArray(user.skills) ? user.skills.join(", ") : user.skills || "",
@@ -30,12 +31,29 @@ const EditProfile = ({ user }) => {
 
   const handleSaveprofile = async () => {
     try {
-      console.log("Current gender:", gender);
+      seterror("");
+
+      let uploadedPhotoUrl = photoUrl;
+
+      if (photoFile) {
+        const formData = new FormData();
+        formData.append("photo", photoFile);
+
+        const uploadRes = await axios.post(
+          BASE_URL + "/profile/photoupload",
+          formData,
+          {
+            withCredentials: true,
+          },
+        );
+
+        uploadedPhotoUrl = uploadRes.data.url;
+      }
       const updatedData = {
         firstName,
         lastName,
         age,
-        photoUrl,
+        photoUrl: uploadedPhotoUrl,
         skills: skills.split(",").map((skill) => skill.trim()),
         gender,
         githubUrl,
@@ -143,14 +161,27 @@ const EditProfile = ({ user }) => {
               {/* Photo URL */}
               <div className="mt-5">
                 <label className="label text-md pb-2 text-[#D7DEDA]">
-                  Profile Photo URL
+                  Profile Photo
                 </label>
-                <input
+                {/* <input
                   type="url"
                   className="input w-full bg-[#0B0F0E] border-[#26332F] focus:border-[#39FF88] focus:outline-none"
                   placeholder="https://example.com/photo.jpg"
                   value={photoUrl}
                   onChange={(e) => setphotoUrl(e.target.value)}
+                /> */}
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="file-input w-full bg-[#0B0F0E] border-[#26332F]"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+
+                    if (file) {
+                      setphotoFile(file);
+                    }
+                  }}
                 />
               </div>
 
@@ -211,6 +242,7 @@ const EditProfile = ({ user }) => {
               </div>
 
               {/* Button */}
+              <p>{error?.response?.data}</p>
               <button
                 className="btn w-full mt-7 border-none bg-[#39FF88] text-[#080A0A] hover:bg-[#2ee879] font-semibold rounded-lg"
                 onClick={handleSaveprofile}
