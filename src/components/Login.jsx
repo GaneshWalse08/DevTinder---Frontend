@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 
 const Login = () => {
   const [emailId, setemailId] = useState("anaghawaghmare@gmail.com");
@@ -31,14 +32,17 @@ const Login = () => {
       );
 
       dispatch(addUser(res.data));
+      toast.success("successfully logged in!")
       navigate("/feed");
     } catch (err) {
+      toast.success("logged in Failed!")
       seterror(err.response?.data || "Something went wrong");
     }
   };
 
   return (
     <>
+    <Toaster position="bottom-right" richColors/>
       <div className="absolute inset-0 z-0">
         <Particles
           particleCount={310}

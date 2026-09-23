@@ -5,6 +5,7 @@ import axios from "axios";
 import { FourSquare } from "react-loading-indicators";
 import { useDispatch } from "react-redux";
 import { addUser } from "@/utils/userSlice";
+import { Toaster, toast } from "sonner";
 
 const EditProfile = ({ user }) => {
   // const {firstName, lastName, age, photoUrl, skills, gender, githubUrl, linkedinUrl, about} = props;
@@ -47,10 +48,13 @@ const EditProfile = ({ user }) => {
       });
 
       dispatch(addUser(res.data));
+
+      toast.success("Profile saved successfully");
     } catch (err) {
-      console.log("Save profile error:", err);
-      console.log("Response data:", err.response?.data);
-      console.log("Status:", err.response?.status);
+      // console.log("Save profile error:", err);
+      // console.log("Response data:", err.response?.data);
+      // console.log("Status:", err.response?.status);
+      toast.error("Failed to save profile");
     }
   };
 
@@ -64,6 +68,7 @@ const EditProfile = ({ user }) => {
 
   return (
     <>
+      <Toaster position="bottom-right" richColors />
       <div className="flex justify-center gap-30">
         <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-10">
           <div className="w-full max-w-2xl">

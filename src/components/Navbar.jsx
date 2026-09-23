@@ -6,6 +6,8 @@ import { BASE_URL } from "@/utils/constants";
 import { removeUser } from "@/utils/userSlice";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsSharp, IoLogOutOutline  } from "react-icons/io5";
+import { Toaster, toast } from 'sonner';
+
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
@@ -18,13 +20,17 @@ const Navbar = () => {
     try {
       await axios.post(BASE_URL + "/logout",{}, { withCredentials: true });
       dispatch(removeUser());
+      toast.success("successfully logged out")
       navigate("/login");
     } catch (err) {
       console.log("Something Went wrong!!");
+      toast.error("Logout Failed!")
     }
   };
 
   return (
+    <>
+    <Toaster position="bottom-right" richColors/>
     <div className="navbar relative z-50 bg-[#0D1110] shadow-sm">
       <div className="flex-1">
         <Link className="inline-block cursor-pointer" to="/">
@@ -98,6 +104,7 @@ const Navbar = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
