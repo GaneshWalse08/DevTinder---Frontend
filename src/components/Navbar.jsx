@@ -7,6 +7,7 @@ import { removeUser } from "@/utils/userSlice";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsSharp, IoLogOutOutline  } from "react-icons/io5";
 import { Toaster, toast } from 'sonner';
+import { FaUserFriends } from "react-icons/fa";
 
 
 const Navbar = () => {
@@ -94,7 +95,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link className="justify-between">Settings <span><IoSettingsSharp /></span></Link> 
+                <Link to="/connections" className="justify-between">My Connections <span><FaUserFriends /></span></Link> 
               </li>
               <li>
                 <Link onClick={handleLogOut} className="justify-between">Logout<span><IoLogOutOutline /></span></Link>

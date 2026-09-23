@@ -6,6 +6,7 @@ import appStore from "./utils/appStore";
 import Feed from "./components/Feed";
 import Home from "./Pages/Home";
 import Profile from "./components/Profile";
+import Connections from "./components/Connections";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/connections" element={<Connections />} />
             </Route>
           </Routes>
         </BrowserRouter>
