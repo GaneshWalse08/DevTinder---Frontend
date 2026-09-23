@@ -1,5 +1,5 @@
-const UserCard = (props) => {
-  const { user } = props;
+const UserCard = ({user}) => {
+  const { firstName, lastName, age, gender, about, photoUrl, linkedinUrl, githubUrl, skills } = user;
 
   return (
     <div className="w-96 overflow-hidden rounded-3xl border border-emerald-500/20 bg-[#080A0A] shadow-2xl shadow-emerald-950/30">
@@ -8,7 +8,7 @@ const UserCard = (props) => {
         <div className="h-44 w-44 overflow-hidden rounded-full border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20">
           <img
             src={
-              user.photoUrl ||
+              photoUrl ||
               "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=600&auto=format&fit=crop&q=60"
             }
             alt="Profile"
@@ -27,17 +27,17 @@ const UserCard = (props) => {
         {/* Name + Age */}
         <div className="text-center">
           <h2 className="text-3xl font-bold text-white">
-            {user.firstName} {user.lastName}
+            {firstName} {lastName}
           </h2>
 
           <div className="flex justify-evenly">
-            {user.age && (
-              <p className="mt-1 text-gray-400 pr-3">{user.age} years</p>
+            {age && (
+              <p className="mt-1 text-gray-400 pr-3">{age} years</p>
             )}
 
-            {user.gender && (
+            {gender && (
               <p className="mt-1 text-gray-400 pr-3">
-                {user.gender} {user.gender === "male" ? "♂" : "♀"}{" "}
+                {gender} {gender === "male" ? "♂" : "♀"}{" "}
               </p>
             )}
           </div>
@@ -45,9 +45,9 @@ const UserCard = (props) => {
 
         {/* GitHub + LinkedIn */}
         <div className="mt-5 flex gap-3">
-          {user.githubUrl && (
+          {githubUrl && (
             <a
-              href={user.githubUrl}
+              href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-600 px-4 py-3 text-sm font-medium text-white transition hover:border-emerald-400 hover:bg-emerald-500/10"
@@ -57,9 +57,9 @@ const UserCard = (props) => {
             </a>
           )}
 
-          {user.linkedinUrl && (
+          {linkedinUrl && (
             <a
-              href={user.linkedinUrl}
+              href={linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-1 items-center justify-center gap-2 rounded-full border border-blue-500/40 px-4 py-3 text-sm font-medium text-white transition hover:bg-blue-500/10"
@@ -78,7 +78,7 @@ const UserCard = (props) => {
           </h3>
 
           <p className="text-sm leading-6 text-gray-400">
-            {user.about || "This is default about the user..."}
+            {about || "This is default about the user..."}
           </p>
         </div>
 
@@ -90,7 +90,7 @@ const UserCard = (props) => {
           </h3>
 
           <div className="flex flex-wrap gap-2">
-            {user.skills?.map((skill, index) => (
+            {skills?.map((skill, index) => (
               <span
                 key={index}
                 className="rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-sm text-emerald-200"
