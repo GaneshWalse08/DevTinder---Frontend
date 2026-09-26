@@ -1,5 +1,40 @@
-const UserCard = ({user}) => {
-  const { firstName, lastName, age, gender, about, photoUrl, linkedinUrl, githubUrl, skills } = user;
+import { BASE_URL } from "@/utils/constants";
+import { removeFeed } from "@/utils/feedSlice";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
+const UserCard = ({ user }) => {
+  // const feed = useSelector((store) => store.feed);
+  const dispatch = useDispatch();
+
+  const {
+    _id,
+    firstName,
+    lastName,
+    age,
+    gender,
+    about,
+    photoUrl,
+    linkedinUrl,
+    githubUrl,
+    skills,
+  } = user;
+
+  const handelSendRequest = async (status, userId) => {
+    try {
+      await axios.post(
+        BASE_URL + "/request/send/" + status + "/" + userId,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      dispatch(removeFeed(_id));
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   return (
     <div className="w-96 overflow-hidden rounded-3xl border border-emerald-500/20 bg-[#080A0A] shadow-2xl shadow-emerald-950/30">
@@ -31,9 +66,7 @@ const UserCard = ({user}) => {
           </h2>
 
           <div className="flex justify-evenly">
-            {age && (
-              <p className="mt-1 text-gray-400 pr-3">{age} years</p>
-            )}
+            {age && <p className="mt-1 text-gray-400 pr-3">{age} years</p>}
 
             {gender && (
               <p className="mt-1 text-gray-400 pr-3">
@@ -109,6 +142,7 @@ const UserCard = ({user}) => {
           <button
             className="cursor-pointer flex h-13 w-13 items-center justify-center rounded-full bg-[#1b1d20] text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-500"
             title="Ignore"
+            onClick={() => handelSendRequest("ignored", _id)}
           >
             <span className="text-4xl font-light leading-none">×</span>
           </button>
@@ -117,6 +151,7 @@ const UserCard = ({user}) => {
           <button
             className="cursor-pointer flex h-13 w-13 items-center justify-center rounded-full bg-[#1b1d20] text-red-500 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-400"
             title="Interested"
+            onClick={() => handelSendRequest("interested", _id)}
           >
             <span className="text-4xl leading-none">♡</span>
           </button>

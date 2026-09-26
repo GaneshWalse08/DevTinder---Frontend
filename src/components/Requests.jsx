@@ -1,6 +1,5 @@
 import { BASE_URL } from "@/utils/constants";
 import { addRequest, removeRequest } from "@/utils/requestSlice";
-import { removeUser } from "@/utils/userSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +22,7 @@ const Requests = () => {
 
   const reviewRequests = async (status, _id) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         BASE_URL + "/request/review/" + status + "/" + _id,
         {},
         { withCredentials: true },
