@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [emailId, setemailId] = useState("anaghawaghmare@gmail.com");
@@ -91,6 +92,15 @@ const Login = () => {
             >
               Login
             </button>
+
+            <div>
+              <p className="text-center text-gray-400 pt-1.5">
+              Don't have an account?{" "}
+              <Link to="/signup" className="text-emerald-400 hover:underline">
+                Sign Up
+              </Link>
+            </p>
+            </div>
           </div>
         </div>
       </div>

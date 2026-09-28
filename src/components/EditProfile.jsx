@@ -173,7 +173,7 @@ const EditProfile = ({ user }) => {
 
                 <input
                   type="file"
-                  accept="image/*"
+                  accept=".png,.jpg,.jpeg"
                   className="file-input w-full bg-[#0B0F0E] border-[#26332F]"
                   onChange={(e) => {
                     const file = e.target.files[0];
