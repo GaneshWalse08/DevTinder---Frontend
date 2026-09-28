@@ -1,11 +1,13 @@
 import { BASE_URL } from "@/utils/constants";
 import { removeFeed } from "@/utils/feedSlice";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const UserCard = ({ user }) => {
-  // const feed = useSelector((store) => store.feed);
   const dispatch = useDispatch();
+
+  const [swipeDirection, setSwipeDirection] = useState(null);
 
   const {
     _id,
@@ -21,6 +23,9 @@ const UserCard = ({ user }) => {
   } = user;
 
   const handelSendRequest = async (status, userId) => {
+    // Start animation
+    setSwipeDirection(status === "interested" ? "right" : "left");
+
     try {
       await axios.post(
         BASE_URL + "/request/send/" + status + "/" + userId,
@@ -30,14 +35,33 @@ const UserCard = ({ user }) => {
         },
       );
 
-      dispatch(removeFeed(_id));
+      // Wait for animation to finish
+      setTimeout(() => {
+        dispatch(removeFeed(_id));
+      }, 400);
     } catch (err) {
       console.log(err.message);
+
+      // Reset animation if request fails
+      setSwipeDirection(null);
     }
   };
 
   return (
-    <div className="w-96 overflow-hidden rounded-3xl border border-emerald-500/20 bg-[#080A0A] shadow-2xl shadow-emerald-950/30">
+    <div
+      className={`
+        w-96 overflow-hidden rounded-3xl border border-emerald-500/20
+        bg-[#080A0A] shadow-2xl shadow-emerald-950/30
+        transition-all duration-400 ease-in-out
+        ${
+          swipeDirection === "right"
+            ? "translate-x-[120vw] rotate-12 opacity-0"
+            : swipeDirection === "left"
+              ? "-translate-x-[120vw] -rotate-12 opacity-0"
+              : "translate-x-0 rotate-0 opacity-100"
+        }
+      `}
+    >
       {/* Profile Image */}
       <div className="relative flex justify-center pt-6">
         <div className="h-44 w-44 overflow-hidden rounded-full border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20">
@@ -51,7 +75,6 @@ const UserCard = ({ user }) => {
           />
         </div>
 
-        {/* Developer Badge */}
         <div className="absolute right-5 top-6 rounded-full border border-emerald-500/30 bg-[#101715] px-3 py-1.5 text-xs text-emerald-300">
           ● Developer
         </div>
@@ -66,11 +89,11 @@ const UserCard = ({ user }) => {
           </h2>
 
           <div className="flex justify-evenly">
-            {age && <p className="mt-1 text-gray-400 pr-3">{age} years</p>}
+            {age && <p className="mt-1 pr-3 text-gray-400">{age} years</p>}
 
             {gender && (
-              <p className="mt-1 text-gray-400 pr-3">
-                {gender} {gender === "male" ? "♂" : "♀"}{" "}
+              <p className="mt-1 pr-3 text-gray-400">
+                {gender} {gender === "male" ? "♂" : "♀"}
               </p>
             )}
           </div>
@@ -134,24 +157,24 @@ const UserCard = ({ user }) => {
           </div>
         </div>
 
-        {/* Divider */}
-
         {/* Action Buttons */}
         <div className="mt-6 flex items-center justify-between gap-10 border-t border-white/10 pt-5">
-          {/* Ignore Button */}
+          {/* Ignore */}
           <button
-            className="cursor-pointer flex h-13 w-13 items-center justify-center rounded-full bg-[#1b1d20] text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-500"
+            className="flex h-13 w-13 cursor-pointer items-center justify-center rounded-full bg-[#1b1d20] text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-500"
             title="Ignore"
             onClick={() => handelSendRequest("ignored", _id)}
+            disabled={swipeDirection !== null}
           >
             <span className="text-4xl font-light leading-none">×</span>
           </button>
 
-          {/* Interested Button */}
+          {/* Interested */}
           <button
-            className="cursor-pointer flex h-13 w-13 items-center justify-center rounded-full bg-[#1b1d20] text-red-500 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-400"
+            className="flex h-13 w-13 cursor-pointer items-center justify-center rounded-full bg-[#1b1d20] text-red-500 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-400"
             title="Interested"
             onClick={() => handelSendRequest("interested", _id)}
+            disabled={swipeDirection !== null}
           >
             <span className="text-4xl leading-none">♡</span>
           </button>

@@ -11,6 +11,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { MdPendingActions } from "react-icons/md";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useState } from "react";
+import { MdOutlineDynamicFeed } from "react-icons/md";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
@@ -135,6 +136,19 @@ const Navbar = () => {
                     Profile
                     <span>
                       <CgProfile />
+                    </span>
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="/feed"
+                    className="justify-between"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Feed
+                    <span>
+                      <MdOutlineDynamicFeed />
                     </span>
                   </Link>
                 </li>
