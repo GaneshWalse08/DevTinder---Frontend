@@ -22,8 +22,8 @@ const UserCard = ({ user }) => {
     skills,
   } = user;
 
-  const handelSendRequest = async (status, userId) => {
-    // Start animation
+  const handleSendRequest = async (status, userId) => {
+    // Start swipe animation
     setSwipeDirection(status === "interested" ? "right" : "left");
 
     try {
@@ -70,7 +70,7 @@ const UserCard = ({ user }) => {
               photoUrl ||
               "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=600&auto=format&fit=crop&q=60"
             }
-            alt="Profile"
+            alt={`${firstName} ${lastName}`}
             className="h-full w-full object-cover"
           />
         </div>
@@ -82,49 +82,51 @@ const UserCard = ({ user }) => {
 
       {/* Card Body */}
       <div className="px-6 pb-6 pt-5">
-        {/* Name + Age */}
+        {/* Name + Age + Gender */}
         <div className="text-center">
           <h2 className="text-3xl font-bold text-white">
             {firstName} {lastName}
           </h2>
 
-          <div className="flex justify-evenly">
-            {age && <p className="mt-1 pr-3 text-gray-400">{age} years</p>}
+          <div className="flex justify-center gap-5">
+            {age && <p className="mt-1 text-gray-400">{age} years</p>}
 
             {gender && (
-              <p className="mt-1 pr-3 text-gray-400">
-                {gender} {gender === "male" ? "♂" : "♀"}
+              <p className="mt-1 text-gray-400">
+                {gender} {gender.toLowerCase() === "male" ? "♂" : "♀"}
               </p>
             )}
           </div>
         </div>
 
         {/* GitHub + LinkedIn */}
-        <div className="mt-5 flex gap-3">
-          {githubUrl && (
-            <a
-              href={githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-600 px-4 py-3 text-sm font-medium text-white transition hover:border-emerald-400 hover:bg-emerald-500/10"
-            >
-              <span className="text-lg">◉</span>
-              GitHub ↗
-            </a>
-          )}
+        {(githubUrl || linkedinUrl) && (
+          <div className="mt-5 flex gap-3">
+            {githubUrl && (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-600 px-4 py-3 text-sm font-medium text-white transition hover:border-emerald-400 hover:bg-emerald-500/10"
+              >
+                <span className="text-lg">◉</span>
+                GitHub ↗
+              </a>
+            )}
 
-          {linkedinUrl && (
-            <a
-              href={linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-1 items-center justify-center gap-2 rounded-full border border-blue-500/40 px-4 py-3 text-sm font-medium text-white transition hover:bg-blue-500/10"
-            >
-              <span className="font-bold">in</span>
-              LinkedIn ↗
-            </a>
-          )}
-        </div>
+            {linkedinUrl && (
+              <a
+                href={linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-1 items-center justify-center gap-2 rounded-full border border-blue-500/40 px-4 py-3 text-sm font-medium text-white transition hover:bg-blue-500/10"
+              >
+                <span className="font-bold">in</span>
+                LinkedIn ↗
+              </a>
+            )}
+          </div>
+        )}
 
         {/* About */}
         <div className="mt-6">
@@ -139,31 +141,33 @@ const UserCard = ({ user }) => {
         </div>
 
         {/* Skills */}
-        <div className="mt-6">
-          <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-300">
-            <span className="text-emerald-400">&lt;/&gt;</span>
-            Skills
-          </h3>
+        {skills?.length > 0 && (
+          <div className="mt-6">
+            <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-300">
+              <span className="text-emerald-400">&lt;/&gt;</span>
+              Skills
+            </h3>
 
-          <div className="flex flex-wrap gap-2">
-            {skills?.map((skill, index) => (
-              <span
-                key={index}
-                className="rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-sm text-emerald-200"
-              >
-                {skill}
-              </span>
-            ))}
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-sm text-emerald-200"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Action Buttons */}
         <div className="mt-6 flex items-center justify-between gap-10 border-t border-white/10 pt-5">
           {/* Ignore */}
           <button
-            className="flex h-13 w-13 cursor-pointer items-center justify-center rounded-full bg-[#1b1d20] text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-500"
+            className="flex h-13 w-13 cursor-pointer items-center justify-center rounded-full bg-[#1b1d20] text-white shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-500 disabled:cursor-not-allowed"
             title="Ignore"
-            onClick={() => handelSendRequest("ignored", _id)}
+            onClick={() => handleSendRequest("ignored", _id)}
             disabled={swipeDirection !== null}
           >
             <span className="text-4xl font-light leading-none">×</span>
@@ -171,9 +175,9 @@ const UserCard = ({ user }) => {
 
           {/* Interested */}
           <button
-            className="flex h-13 w-13 cursor-pointer items-center justify-center rounded-full bg-[#1b1d20] text-red-500 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-400"
+            className="flex h-13 w-13 cursor-pointer items-center justify-center rounded-full bg-[#1b1d20] text-red-500 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-[#25272b] hover:text-red-400 disabled:cursor-not-allowed"
             title="Interested"
-            onClick={() => handelSendRequest("interested", _id)}
+            onClick={() => handleSendRequest("interested", _id)}
             disabled={swipeDirection !== null}
           >
             <span className="text-4xl leading-none">♡</span>
