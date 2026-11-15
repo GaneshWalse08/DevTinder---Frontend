@@ -46,30 +46,31 @@ const EditProfile = ({ user }) => {
   useEffect(() => {
     if (!user) return;
 
-    console.log("User received in EditProfile:", user);
+    // console.log("User received in EditProfile:", user);
+    const userData = user.data || user;
 
-    setfirstName(user.firstName || "");
-    setlastName(user.lastName || "");
-    setage(user.age || "");
+    setfirstName(userData.firstName || "");
+    setlastName(userData.lastName || "");
+    setage(userData.age || "");
 
     setgender(
-      user.gender
-        ? user.gender.charAt(0).toUpperCase() +
-            user.gender.slice(1).toLowerCase()
-        : ""
+      userData.gender
+        ? userData.gender.charAt(0).toUpperCase() +
+            userData.gender.slice(1).toLowerCase()
+        : "",
     );
 
-    setphotoUrl(user.photoUrl || "");
+    setphotoUrl(userData.photoUrl || "");
 
     setskills(
-      Array.isArray(user.skills)
-        ? user.skills.join(", ")
-        : user.skills || ""
+      Array.isArray(userData.skills)
+        ? userData.skills.join(", ")
+        : userData.skills || "",
     );
 
-    setgithubUrl(user.githubUrl || "");
-    setlinkedinUrl(user.linkedinUrl || "");
-    setabout(user.about || "");
+    setgithubUrl(userData.githubUrl || "");
+    setlinkedinUrl(userData.linkedinUrl || "");
+    setabout(userData.about || "");
 
     // Reset selected file when user changes
     setphotoFile(null);
@@ -100,7 +101,7 @@ const EditProfile = ({ user }) => {
           formData,
           {
             withCredentials: true,
-          }
+          },
         );
 
         console.log("Photo Upload Response:", uploadRes.data);
@@ -140,13 +141,9 @@ const EditProfile = ({ user }) => {
       // UPDATE PROFILE
       // -----------------------------------------
 
-      const res = await axios.patch(
-        BASE_URL + "/profile/edit",
-        updatedData,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.patch(BASE_URL + "/profile/edit", updatedData, {
+        withCredentials: true,
+      });
 
       console.log("Profile Update Response:", res.data);
 
@@ -186,12 +183,7 @@ const EditProfile = ({ user }) => {
   if (!user) {
     return (
       <div className="min-h-screen bg-[#080A0A] flex items-center justify-center">
-        <FourSquare
-          color="#39FF88"
-          size="medium"
-          text="Loading"
-          textColor=""
-        />
+        <FourSquare color="#39FF88" size="medium" text="Loading" textColor="" />
       </div>
     );
   }
@@ -207,10 +199,8 @@ const EditProfile = ({ user }) => {
     gender,
     about,
     photoUrl,
-
     linkedinUrl,
     githubUrl,
-
     skills: skills
       .split(",")
       .map((skill) => skill.trim())
@@ -226,17 +216,13 @@ const EditProfile = ({ user }) => {
       <Toaster position="bottom-right" richColors />
 
       <div className="flex justify-center gap-30">
-
         {/* ===================================== */}
         {/* LEFT SIDE - EDIT FORM */}
         {/* ===================================== */}
 
         <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-10">
-
           <div className="w-full max-w-2xl">
-
             <div className="fieldset bg-[#080A0A] border border-[#26332F] rounded-2xl w-full p-6 md:p-8 shadow-2xl">
-
               {/* TITLE */}
 
               <legend className="fieldset-legend mx-auto mb-6 px-4 text-2xl font-semibold text-[#F2F5F3]">
@@ -248,7 +234,6 @@ const EditProfile = ({ user }) => {
               {/* ================================= */}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-
                 {/* First Name */}
 
                 <div>
@@ -280,7 +265,6 @@ const EditProfile = ({ user }) => {
                     onChange={(e) => setlastName(e.target.value)}
                   />
                 </div>
-
               </div>
 
               {/* ================================= */}
@@ -288,7 +272,6 @@ const EditProfile = ({ user }) => {
               {/* ================================= */}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-
                 {/* Age */}
 
                 <div>
@@ -321,20 +304,13 @@ const EditProfile = ({ user }) => {
                       Select Gender
                     </option>
 
-                    <option value="Male">
-                      Male
-                    </option>
+                    <option value="Male">Male</option>
 
-                    <option value="Female">
-                      Female
-                    </option>
+                    <option value="Female">Female</option>
 
-                    <option value="Other">
-                      Other
-                    </option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
-
               </div>
 
               {/* ================================= */}
@@ -342,7 +318,6 @@ const EditProfile = ({ user }) => {
               {/* ================================= */}
 
               <div className="mt-5">
-
                 <label className="label text-md pb-2 text-[#D7DEDA]">
                   Profile Photo
                 </label>
@@ -373,7 +348,6 @@ const EditProfile = ({ user }) => {
                     />
                   </div>
                 )}
-
               </div>
 
               {/* ================================= */}
@@ -381,7 +355,6 @@ const EditProfile = ({ user }) => {
               {/* ================================= */}
 
               <div className="mt-5">
-
                 <label className="label text-md pb-2 text-[#D7DEDA]">
                   Skills
                 </label>
@@ -397,7 +370,6 @@ const EditProfile = ({ user }) => {
                 <p className="text-xs text-gray-500 mt-2">
                   Separate skills using commas.
                 </p>
-
               </div>
 
               {/* ================================= */}
@@ -405,7 +377,6 @@ const EditProfile = ({ user }) => {
               {/* ================================= */}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-
                 {/* GitHub */}
 
                 <div>
@@ -437,7 +408,6 @@ const EditProfile = ({ user }) => {
                     onChange={(e) => setlinkedinUrl(e.target.value)}
                   />
                 </div>
-
               </div>
 
               {/* ================================= */}
@@ -445,7 +415,6 @@ const EditProfile = ({ user }) => {
               {/* ================================= */}
 
               <div className="mt-5">
-
                 <label className="label text-md pb-2 text-[#D7DEDA]">
                   About
                 </label>
@@ -456,7 +425,6 @@ const EditProfile = ({ user }) => {
                   value={about}
                   onChange={(e) => setabout(e.target.value)}
                 />
-
               </div>
 
               {/* ================================= */}
@@ -464,9 +432,7 @@ const EditProfile = ({ user }) => {
               {/* ================================= */}
 
               {error && (
-                <p className="mt-4 text-center text-sm text-red-400">
-                  {error}
-                </p>
+                <p className="mt-4 text-center text-sm text-red-400">{error}</p>
               )}
 
               {/* ================================= */}
@@ -480,7 +446,6 @@ const EditProfile = ({ user }) => {
               >
                 {loading ? "Saving..." : "Save profile"}
               </button>
-
             </div>
           </div>
         </div>
@@ -490,11 +455,8 @@ const EditProfile = ({ user }) => {
         {/* ===================================== */}
 
         <div className="my-auto">
-
           <UserCard user={previewUser} />
-
         </div>
-
       </div>
     </>
   );
